@@ -1,11 +1,13 @@
 import { AgentPlatform, AIAgent } from './types';
 import { StreamChat } from 'stream-chat';
 import { OpenAIAgent } from './openai/OpenAIAgent';
+import { AnthropicAgent } from './anthropic/AnthropicAgent';
 import { apiKey, serverClient } from '../serverClient';
+import { GeminiAIAgent } from './gemini/GeminiAIAgents';
 
 export const createAgent = async (
   user_id: string,
-  platform: AgentPlatform = AgentPlatform.OPENAI, 
+  platform: AgentPlatform,
   channel_type: string,
   channel_id: string,
 ): Promise<AIAgent> => {
@@ -17,5 +19,10 @@ export const createAgent = async (
   const channel = client.channel(channel_type, channel_id);
   await channel.watch();
 
-  return new OpenAIAgent(client, channel);
+  if (platform === AgentPlatform.OPENAI) {
+    return new OpenAIAgent(client, channel);
+  } else if (platform === AgentPlatform.GEMINI) {
+    return new GeminiAIAgent(client, channel);
+  } else return new AnthropicAgent(client, channel);
 };
+  

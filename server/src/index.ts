@@ -37,7 +37,7 @@ app.post('/start-ai-agent', async (req, res) => {
   const {
     channel_id,
     channel_type = 'messaging',
-    platform = 'openai', 
+    platform = 'gemini',
   } = req.body;
 
   if (!channel_id) {
@@ -93,7 +93,9 @@ app.post('/start-ai-agent', async (req, res) => {
   } catch (error) {
     const errorMessage = (error as Error).message;
     console.error('Failed to start AI Agent', errorMessage);
-    res.status(500).json({ error: 'Failed to start AI Agent', reason: errorMessage });
+    res
+      .status(500)
+      .json({ error: 'Failed to start AI Agent', reason: errorMessage });
   } finally {
     pendingAiAgents.delete(user_id);
   }
@@ -115,13 +117,18 @@ app.post('/stop-ai-agent', async (req, res) => {
   } catch (error) {
     const errorMessage = (error as Error).message;
     console.error('Failed to stop AI Agent', errorMessage);
-    res.status(500).json({ error: 'Failed to stop AI Agent', reason: errorMessage });
+    res
+      .status(500)
+      .json({ error: 'Failed to stop AI Agent', reason: errorMessage });
   }
 });
 
 async function disposeAiAgent(aiAgent: AIAgent, userId: string) {
   await aiAgent.dispose();
-  const channel = serverClient.channel(aiAgent.channel.type, aiAgent.channel.id);
+  const channel = serverClient.channel(
+    aiAgent.channel.type,
+    aiAgent.channel.id,
+  );
   await channel.removeMembers([userId]);
 }
 

@@ -22,6 +22,7 @@ STREAM_API_KEY=insert_your_key
 STREAM_API_SECRET=insert_your_secret
 OPENAI_API_KEY=insert_your_key
 OPENWEATHER_API_KEY=insert_your_key
+GOOGLE_API_KEY=insert_your_key
 ```
 
 You can provide a key for either `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`, depending on which one you would use. The `OPENWEATHER_API_KEY` is optional, in case you want to use the function calling example with OpenAI.
